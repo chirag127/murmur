@@ -1,0 +1,20 @@
+model: "openai:gpt-4o"
+temperature: 0.2
+max_tokens: 4096
+repo_path: "."
+dry_run: false
+max_workers: 4
+max_depth: 3
+auto_branch: true
+auto_commit: true
+no_commit: false
+review_mode: false
+db_path: ".murmur/murmur.db"
+memory_db_path: ".murmur/memory.db"
+snapshot_interval: 30
+rag_enabled: true
+rag_backend: "chroma"
+rag_db_path: ".murmur/rag"
+langsmith_tracing: false
+
+mcp_servers: {}

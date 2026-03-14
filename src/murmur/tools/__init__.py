@@ -1,0 +1,3 @@
+"""
+MCP tools parsing module
+"""
