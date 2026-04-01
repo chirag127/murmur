@@ -1,5 +1,5 @@
-import os
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
+
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -81,7 +81,7 @@ class AppConfig(BaseSettings):
     # LangSmith / LangFuse Tracing
     langchain_api_key: str = ""
     langchain_tracing_v2: bool = False
-    
+
     langfuse_secret_key: str = ""
     langfuse_public_key: str = ""
     langfuse_base_url: str = "https://cloud.langfuse.com"

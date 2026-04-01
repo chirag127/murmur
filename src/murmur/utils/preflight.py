@@ -1,8 +1,9 @@
 import os
 import shutil
 import subprocess
-from rich.panel import Panel
+
 from rich.console import Console
+from rich.panel import Panel
 
 console = Console()
 
@@ -13,19 +14,26 @@ def run_preflight(repo_path: str, config) -> None:
     warnings = []
 
     # 1. API Keys
-    if not (config.model.startswith("ollama") or
-            config.openai_api_key or config.anthropic_api_key or config.google_api_key or
-            config.nvidia_api_key or config.groq_api_key):
+    if not (
+        config.model.startswith("ollama")
+        or config.openai_api_key
+        or config.anthropic_api_key
+        or config.google_api_key
+        or config.nvidia_api_key
+        or config.groq_api_key
+    ):
         errors.append("No LLM API key configured for remote models.")
-        
+
     # 2. Node >= 18
     node_path = shutil.which("node")
     if not node_path:
         errors.append("'node' not found. It is required for MCP servers.")
     else:
         try:
-            ver = subprocess.run(["node", "-v"], capture_output=True, text=True).stdout.strip()
-            if int(ver.strip('v').split('.')[0]) < 18:
+            ver = subprocess.run(
+                ["node", "-v"], capture_output=True, text=True
+            ).stdout.strip()
+            if int(ver.strip("v").split(".")[0]) < 18:
                 errors.append(f"Node version {ver} is below required 18+")
         except Exception:
             errors.append("Failed to verify Node version.")
@@ -66,11 +74,25 @@ def run_preflight(repo_path: str, config) -> None:
 
     if errors:
         msg = "\n".join([f"[red]✗[/red] {e}" for e in errors])
-        console.print(Panel(msg, title="[bold red]Murmur Preflight Failed", border_style="red"))
+        console.print(
+            Panel(msg, title="[bold red]Murmur Preflight Failed", border_style="red")
+        )
         raise SystemExit(1)
 
     if warnings:
         msg = "\n".join([f"[yellow]![/yellow] {w}" for w in warnings])
-        console.print(Panel(msg, title="[bold yellow]Murmur Preflight Warnings", border_style="yellow"))
+        console.print(
+            Panel(
+                msg,
+                title="[bold yellow]Murmur Preflight Warnings",
+                border_style="yellow",
+            )
+        )
 
-    console.print(Panel("[green]✓ All critical systems online.[/green]", title="[bold green]Murmur Preflight Passed", border_style="green"))
+    console.print(
+        Panel(
+            "[green]✓ All critical systems online.[/green]",
+            title="[bold green]Murmur Preflight Passed",
+            border_style="green",
+        )
+    )

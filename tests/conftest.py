@@ -1,11 +1,11 @@
+from unittest.mock import AsyncMock
+
 import pytest
-import os
-import shutil
-from unittest.mock import AsyncMock, patch
 
 from murmur.config import AppConfig
 from murmur.memory.checkpointer import build_checkpointer, build_store
 from murmur.memory.manager import MemoryManager
+
 
 @pytest.fixture
 def mock_config(tmp_path):
@@ -16,6 +16,7 @@ def mock_config(tmp_path):
     mc.dry_run = True
     return mc
 
+
 @pytest.fixture
 async def mock_memory(mock_config):
     ckpt = build_checkpointer(mock_config.db_path)
@@ -25,11 +26,12 @@ async def mock_memory(mock_config):
     yield manager
     await manager.stop()
 
+
 @pytest.fixture
 def mock_llm():
     llm = AsyncMock()
     # Provide a simple valid JSON string matching TaskSpec
-    llm.ainvoke.return_value.content = '''```json
+    llm.ainvoke.return_value.content = """```json
 [
   {
     "id": "t1",
@@ -39,5 +41,5 @@ def mock_llm():
     "agent_type": "refactor"
   }
 ]
-```'''
+```"""
     return llm

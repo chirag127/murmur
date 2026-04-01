@@ -1,13 +1,15 @@
+
 import pytest
-import os
+
 from murmur.memory.rag import RAGIndex
+
 
 @pytest.mark.asyncio
 async def test_memory_manager(mock_memory):
     # Claim test
     claimed = await mock_memory.claim_file("test.py", "agent_1", "sess_1")
     assert claimed is True
-    
+
     # Conflict test
     claimed_again = await mock_memory.claim_file("test.py", "agent_2", "sess_1")
     assert claimed_again is False
@@ -16,7 +18,8 @@ async def test_memory_manager(mock_memory):
     await mock_memory.release_file("test.py", "agent_1", "sess_1")
     claimed_third = await mock_memory.claim_file("test.py", "agent_2", "sess_1")
     assert claimed_third is True
-    
+
+
 @pytest.mark.asyncio
 async def test_task_runs(mock_memory):
     data = {
@@ -27,12 +30,13 @@ async def test_task_runs(mock_memory):
         "status": "done",
         "created_at": "now",
         "completed_at": "later",
-        "summary": "all good"
+        "summary": "all good",
     }
     await mock_memory.save_task_run(data)
     runs = await mock_memory.list_task_runs()
     assert len(runs) == 1
     assert runs[0]["plan_id"] == "abc"
+
 
 @pytest.mark.asyncio
 async def test_rag_mock(tmp_path):

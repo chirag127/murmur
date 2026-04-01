@@ -1,7 +1,8 @@
 from typing import List
+
 from langchain.chat_models import init_chat_model
-from langchain_core.language_models import BaseChatModel
 from langchain_core.embeddings import Embeddings
+from langchain_core.language_models import BaseChatModel
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langchain_openai import OpenAIEmbeddings
 
@@ -35,8 +36,7 @@ def build_embeddings(config: AppConfig) -> Embeddings:
     """Build embeddings for RAG system."""
     # Using OpenAI Embeddings as default; can be extended for local/other
     return OpenAIEmbeddings(
-        model="text-embedding-3-small", 
-        api_key=config.openai_api_key or "not-used"
+        model="text-embedding-3-small", api_key=config.openai_api_key or "not-used"
     )
 
 
@@ -48,5 +48,5 @@ def list_models(config: AppConfig) -> List[str]:
         "google_genai:gemini-2.5-pro",
         "ollama:llama3",
         "nvidia:meta/llama-3.1-70b-instruct",
-        "groq:llama-3.1-70b-versatile"
+        "groq:llama-3.1-70b-versatile",
     ]

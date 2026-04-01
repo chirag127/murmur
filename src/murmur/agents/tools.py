@@ -1,8 +1,8 @@
 import asyncio
 import os
-import pathspec
-from typing import Dict, Any
+from typing import Any, Dict
 
+import pathspec
 from langchain_core.tools import tool
 
 
@@ -26,9 +26,7 @@ async def run_shell(command: str, timeout: int = 120) -> str:
     """Run an async shell command with a timeout."""
     try:
         proc = await asyncio.create_subprocess_shell(
-            command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
+            command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
         stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
         ret = stdout.decode()
@@ -56,23 +54,23 @@ async def index_codebase(repo_path: str, max_files: int = 300) -> Dict[str, Any]
     if os.path.exists(ignore_path):
         with open(ignore_path, "r", encoding="utf-8") as f:
             lines.extend(f.readlines())
-            
+
     spec = pathspec.PathSpec.from_lines("gitwildmatch", lines)
-    
+
     tree = []
     count = 0
     for root, dirs, files in os.walk(repo_path):
-        dirs[:] = [d for d in dirs if not d.startswith('.')]
+        dirs[:] = [d for d in dirs if not d.startswith(".")]
         for f in files:
             full = os.path.join(root, f)
             rel = os.path.relpath(full, repo_path)
             if spec.match_file(rel):
                 continue
-                
+
             if count >= max_files:
                 break
-                
+
             tree.append(rel)
             count += 1
-            
+
     return {"files": tree, "count": len(tree)}
